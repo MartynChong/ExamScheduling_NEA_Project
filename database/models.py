@@ -11,7 +11,6 @@ class Exam(models.Model):
     class Meta:
         db_table = 'Exam'
 
-
 class Student(models.Model):
     studentid = models.TextField(primary_key=True, blank=True)
     firstname = models.TextField(blank=True, null=True)
@@ -22,7 +21,6 @@ class Student(models.Model):
     class Meta:
         db_table = 'Student'
 
-
 class Exampupil(models.Model):
     # examcode = models.TextField(blank=True, null=True)
     # pupilid = models.TextField(blank=True, null=True)
@@ -31,7 +29,7 @@ class Exampupil(models.Model):
     studentid_link = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
     class Meta:                                                                                                                         
         db_table = 'ExamPupil'
-    
+
 
 class Classroom(models.Model):                                                          
     roomcode = models.TextField(primary_key=True, blank=True)

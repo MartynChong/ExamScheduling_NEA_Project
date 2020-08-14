@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Videos</title>
+</head>
+<body>
+<h1>Master Database</h1>
+<table border="1" width="600">
+<tr>
+<td>Exam Code</td>
+<td>Subject</td>
+<td>Title</td>
+<td>Exam Date</td>
+<td>Exam Time</td>
+<td>Duration</td>
+</tr>
+
+{% for exam in allexams %}
+<tr>
+<td>{{ exam.code }}</td>
+<td>
+{{ exam.subject }}</td>
+<td>
+    {{ exam.title }}</td>
+<td>
+    {{ exam.date }}</td>
+<td>
+    {{ exam.time }}</td>    
+<td>
+    {{ exam.duration }}</td> 
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>
