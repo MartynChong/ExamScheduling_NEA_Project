@@ -22,14 +22,14 @@ class Student(models.Model):
         db_table = 'Student'
 
 class Exampupil(models.Model):
-    examcode = models.TextField(blank=True, null=True)
-    pupilid = models.TextField(blank=True, null=True)
+    # examcode = models.TextField(blank=True, null=True)
+    # pupilid = models.TextField(blank=True, null=True)
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     examcode_link = models.ForeignKey(Exam, null=True, on_delete=models.CASCADE)
     studentid_link = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
     class Meta:                                                                                                                         
         db_table = 'ExamPupil'
-                                        
+
 
 class Classroom(models.Model):                                                          
     roomcode = models.TextField(primary_key=True, blank=True)
