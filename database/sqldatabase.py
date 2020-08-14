@@ -65,7 +65,7 @@ class DatabaseInsert:
     @classmethod
     def mass_insert_exams(cls):
         with cls.conn:
-            for i in range(0, len(ExamInstance.listSubjects) - 1):
+            for i in range(len(ExamInstance.listSubjects)):
                 cls.c.execute("INSERT INTO Exam VALUES (:subject,:title,:code,:date,:times,:duration)",
                               {'subject': ExamInstance.listSubjects[i],
                                'title': ExamInstance.listTitle[i],
