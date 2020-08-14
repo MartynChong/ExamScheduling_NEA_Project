@@ -39,7 +39,7 @@ class DatabaseInsert:
         lastname text,
         birthdate text,
         accessarrangement text
-        ) """)                                  
+        ) """)
         cls.conn.commit()
         cls.c.execute(""" CREATE TABLE Classroom(
         roomcode text,
