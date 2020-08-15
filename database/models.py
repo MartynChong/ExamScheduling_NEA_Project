@@ -1,4 +1,5 @@
 from django.db import models
+import random, string
 
 class Exam(models.Model):
     subject = models.TextField(blank=True, null=True)
@@ -19,9 +20,26 @@ class Student(models.Model):
     lastname = models.TextField(blank=True, null=True)
     birthdate = models.TextField(blank=True, null=True)
     accessarrangement = models.TextField(blank=True, null=True)
+    accesscode = models.TextField(null = True)
 
     class Meta:
         db_table = 'Student'
+
+    @staticmethod
+    def generate_access_code():
+        access_code_list = []
+        for student in Student.objects.all():
+            firstname = student.firstname
+            firstname = firstname[0]
+            lastname = student.lastname
+            lastname = lastname[0]
+            code = student.studentid
+            code = code[2:]
+            letters_and_digits = string.ascii_letters + string.digits
+            result_string = ''.join((random.choice(letters_and_digits) for i in range(6)))
+            result_string = firstname + lastname + result_string + code
+            access_code_list.append(result_string)
+    return access_code_list
 
 class Exampupil(models.Model):
     # examcode = models.TextField(blank=True, null=True)
