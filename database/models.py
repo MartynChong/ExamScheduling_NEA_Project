@@ -39,7 +39,7 @@ class Student(models.Model):
             result_string = ''.join((random.choice(letters_and_digits) for i in range(6)))
             result_string = firstname + lastname + result_string + code
             access_code_list.append(result_string)
-    return access_code_list
+        return access_code_list
 
 class Exampupil(models.Model):
     # examcode = models.TextField(blank=True, null=True)
