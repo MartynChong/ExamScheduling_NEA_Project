@@ -10,6 +10,9 @@ class Exam(models.Model):
 
     class Meta:
         db_table = 'Exam'
+    
+    def convert date_format():
+        
 
 class Student(models.Model):
     studentid = models.TextField(primary_key=True, blank=True)

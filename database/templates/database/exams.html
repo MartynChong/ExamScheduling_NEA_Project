@@ -1,6 +1,11 @@
 {% extends "database/base.html" %}
 {% block content %}
     <h1>Master Database</h1>
+    <form class="example" action="action_page.php">
+        <input type="text" placeholder="Search.." name="search">
+        <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+
     <table border="1" width="700">
     <tr>
     <td>Exam Code</td>
@@ -19,7 +24,7 @@
     <td>
         {{ exam.title }}</td>
     <td>
-        {{ exam.date }}</td>
+        {{ exam.date}}</td>
     <td>
         {{ exam.times }}</td>    
     <td>

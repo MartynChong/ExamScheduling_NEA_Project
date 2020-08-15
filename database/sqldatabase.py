@@ -1,5 +1,5 @@
 import _sqlite3
-from examclass import ExamFile, RoomFile, ExamPupil, NewStudents
+from .examclass import ExamFile, RoomFile, ExamPupil, NewStudents
 
 conn = _sqlite3.connect("legacy.db")
 c = conn.cursor()
@@ -157,9 +157,9 @@ class DatabaseInsert:
     #                   {'first': emp.first, 'last': emp.last})
 
 
-DatabaseInsert.insert_all_tables()
+# DatabaseInsert.insert_all_tables()
 
-# # DatabaseInsert.update_exam_time()
-# # DatabaseInsert.input_query()
-a= DatabaseInsert.get_exam_by_code('4MA1_1F')
-print(a)
+# # # DatabaseInsert.update_exam_time()
+# # # DatabaseInsert.input_query()
+# a= DatabaseInsert.get_exam_by_code('4MA1_1F')
+# print(a)

@@ -49,6 +49,14 @@ class ExamFile(File):
         minutes = int(currentDur[3:5])
         selectedDur = timedelta(hours=hour, minutes=minutes)
         return selectedDur
+    
+    def convert_datetime_to_date(self):
+        timelist = self.listTimes
+        for i in range(len(timelist)):
+            newtime =  timelist[i]
+            newtime = newtime[0:10]   
+            timelist[i] = newtime
+        return timelist
 
     # Obtaining the exam data from the xlsx file and inserting them into arrays
     def obtain_data(self, filename):
