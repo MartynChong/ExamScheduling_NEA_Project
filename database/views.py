@@ -3,7 +3,9 @@ from django.http import HttpResponse
 from .models import Exam
 
 def home(request):
-    return HttpResponse('<h1>Database</h1>')
+    allexams = Exam.objects.all()
+    context={'allexams': allexams}
+    return render(request,'database/home.html',context, )
 
 def exams(request):
     allexams = Exam.objects.all()
