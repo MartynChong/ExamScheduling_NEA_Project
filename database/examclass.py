@@ -229,3 +229,11 @@ class NewStudents(SortDatabase):
                 self.listArrangements.append(StudentInstance.listArrangements[popItem])
 
 print("hi")
+#Editing the date time values 
+# for i in Exam.objects.all():
+#    ...:     count = count+1
+#    ...:     b = a[count]
+#    ...:     b = b[0:10]
+#    ...:     c = parse_date(b)
+#    ...:     currentcode = i.code
+#    ...:     Exam.objects.filter(code=currentcode).update(date=c)
