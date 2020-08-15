@@ -3,8 +3,8 @@
 from django.db import migrations
 from database.models import Student
 
-def populate_access_code():
-    Students = apps.get.model('database', 'Student')
+def populate_access_code(apps, schema_editor):
+    Students = apps.get_model('database', 'Student')
     count = -1
     StudentList = Student.generate_access_code() 
     for student in Students.objects.all():
