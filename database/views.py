@@ -13,5 +13,5 @@ def exams(request):
     context={'allexams': allexams}
     return render(request,'database/exams.html',context)
 
-def exams_search(request):
-    
+# def search(request):
+#     template = 'database/exams.html'
