@@ -58,3 +58,9 @@ class Classroom(models.Model):
 
     class Meta:
         db_table = 'Classroom'
+
+
+class ExamRoom(models.Model):
+    examcode = models.ForeignKey(Exam, null=True. on_delete=models.CASCADE)
+    roomcode = models.ForeignKey(Classroom, null=True, on_delete=models.CASCADE)
+    id = models.AutoField(db_column='ID', primary_key=True)
