@@ -1,7 +1,7 @@
 {% extends "database/base.html" %}
 {% block content %}
     <h1>Master Database</h1>
-    <form class="example" method="GET" action="{% url 'database-search' %}">
+    <form class="example" method="GET" action="{% url 'database-roomsearch' %}">
         <input type="text" placeholder="Search.." name="q" value="{{request.GET.q}}">
         <button type="submit"><i class="fa fa-search"></i></button>
     </form>
