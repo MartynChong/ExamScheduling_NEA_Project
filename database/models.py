@@ -166,6 +166,7 @@ class Clashes():
         self.listExamsInClash = []
         #Variables used to declare Clashes
         self.listCurrentExams = []
+        self.listIndividualExams = []
         self.listCurrentStudents = []
         self.listOldStartTime = []
         self.listNewStartTime = []
@@ -173,6 +174,12 @@ class Clashes():
         self.listOldEndTime = []
         self.listNewEndTime = []
         self.listDate = []
+        self.listExtraTime = []
+        self.listCurrentExam2 = []
+        self.listOldStartTime2 = []
+        self.listOldEndTime2 = []
+        self.listDuration2 = []
+
 
     #This function alters the init lists to include sets of clashing exams and the students involved
     def identify_students_clash(self):
@@ -224,9 +231,10 @@ class Clashes():
             temp = []
             for i in ClashInstance.listExamsInClash[currentclash]:
                 temp.append(i)
+                self.listIndividualExams.append(str(i))
             currentexams = str(temp[0].code) + ', ' + str(temp[1].code)
             self.listCurrentExams.append(currentexams)
-
+            self.listCurrentExams.append(currentexams)
             #Generating String List of the students clashing in those two exams
             temp = []
             for i in ClashInstance.listStudentsInClash[currentclash]:
@@ -241,6 +249,7 @@ class Clashes():
                     currentstudents = currentstudents + str(temp[i].studentid) + ','
                     count += 1
             self.listCurrentStudents.append(currentstudents)
+            self.listCurrentStudents.append(currentstudents)
 
             #Generating String List of the OLD duration, times of each clashing exam
             for i in ClashInstance.listExamsInClash[currentclash]:
@@ -248,6 +257,7 @@ class Clashes():
                 duration = Clashes.convert_duration(i.duration)
                 self.listDuration.append(duration)
                 self.listDate.append(i.date)
+                self.listExtraTime.append(False)
                 #Generating String List of the OLD end times, generated from the start times and duration
                 temp = []
                 #Checking if students involved have Extra Time requirements
@@ -259,6 +269,7 @@ class Clashes():
                         extra_time = True
                 if extra_time == True:
                     self.listDuration[index] = self.listDuration[index] * 1.25
+                    self.listExtraTime[index] = True
                 starttime = datetime.strptime(i.times, '%H:%M:%S')
                 endtime = (starttime + self.listDuration[index]).time()
                 endtime = str(endtime)
@@ -283,6 +294,9 @@ class Clashes():
             self.listNewStartTime.append(str(starttime2.time()))
     
 
+
+    # def split_exams_up(self):
+        
                     
     @staticmethod
     def convert_duration(selectedDur):
@@ -292,7 +306,15 @@ class Clashes():
         selectedDur = timedelta(hours=hour, minutes=minutes)
         return selectedDur
 
-
+    # def print_all(self):
+    #     print(self.listCurrentExams ,
+    #     self.listCurrentStudents ,
+    #     self.listOldStartTime ,
+    #     self.listNewStartTime ,
+    #     self.listDuration ,
+    #     self.listOldEndTime ,
+    #     self.listNewEndTime ,
+    #     self.listDate )
 # import sys
     # def sort_object_order(self, listpriority):
     #     for i in range(0, len(self.rooms)-1):

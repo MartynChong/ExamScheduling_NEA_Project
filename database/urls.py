@@ -8,4 +8,5 @@ urlpatterns = [
     path('search/', views.search, name='database-search'),
     path('rooms/', views.rooms, name='database-rooms'),
     path('exams/<code>/', views.detail_view, name='database-detail'),
+    path('clashes/', views.clashes, name='database-clashes'),
 ]

@@ -1,0 +1,72 @@
+{% extends "database/base.html" %}
+<style type="text/css">
+    table td#CELL9 {background-color:green;}
+  </style>
+{% block content %}
+
+    {% for item in listClashes %}
+        <h>Exams Involved: {{ item.0 }}</h>
+        <h>Students Affected: {{ item.1 }}</h>
+        <table border="1" width="700">
+            <tr>
+                <td>ExamCode</td>
+                <td>Date</td>
+                <td>Current Start Time</td>
+                <td>Current End Time</td>
+                <td>Duration</td>
+                <td>Extra Time?</td>
+            </tr>
+
+            <tr>
+                <td>{{ item.2 }}</td>
+                <td>{{ item.8 }}</td>
+                <td>{{ item.3 }}</td>
+                <td>{{ item.6 }}</td>
+                <td>{{ item.5 }}</td>
+                <td>{{ item.9 }}</td>
+            </tr>
+            <tr>
+                <td>{{ item.2 }}</td>
+                <td>{{ item.8 }}</td>
+                <td>{{ item.3 }}</td>
+                <td>{{ item.6 }}</td>
+                <td>{{ item.5 }}</td>
+                <td>{{ item.9 }}</td>
+            </tr>
+            </table>
+            <p style="visibility: hidden;"> 
+                {{ item }}
+            </p> 
+
+        <table border="1" width="700">
+            <tr>
+                <td>ExamCode</td>
+                <td>Date</td>
+                <td>New Start Time</td>
+                <td>New End Time</td>
+                <td>Duration</td>
+                <td>Extra Time?</td>
+                </tr>
+            
+            <tr>
+                <td>{{ item.2 }}</td>
+                <td>{{ item.8 }}</td>
+                <td id="td#CELL9">{{ item.4 }}</td>
+                <td id="td#CELL9">{{ item.7 }}</td>
+                <td>{{ item.5 }}</td>
+                <td>{{ item.9 }}</td>
+            </tr>
+            
+            <tr>
+                <td>{{ item.2 }}</td>
+                <td>{{ item.8 }}</td>
+                <td id="td#CELL9">{{ item.4 }}</td>
+                <td id="td#CELL9">{{ item.7 }}</td>
+                <td>{{ item.5 }}</td>
+                <td>{{ item.9 }}</td>
+            </tr>
+        </table>
+    {% endfor %}
+
+{% endblock content %}
+

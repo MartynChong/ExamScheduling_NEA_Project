@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Exam, ExamRooms
+from .models import Exam, ExamRooms, Clashes
 from django.db.models import Q
 
 
@@ -37,3 +37,20 @@ def detail_view(request, code):
     }
     context["data"] = Exam.objects.get(code = code)
     return render(request, 'database/detail_view.html',context)
+
+def clashes(request):
+    clashInstance = Clashes()
+    Clashes.displaying_clash(clashInstance)
+    zipped = zip(clashInstance.listCurrentExams,
+        clashInstance.listCurrentStudents,
+        clashInstance.listIndividualExams,
+        clashInstance.listOldStartTime,
+        clashInstance.listNewStartTime,
+        clashInstance.listDuration,
+        clashInstance.listOldEndTime,
+        clashInstance.listNewEndTime,
+        clashInstance.listDate,
+        clashInstance.listExtraTime
+        )
+    context={'listClashes': zipped}
+    return render(request, 'database/clashes.html',context)
