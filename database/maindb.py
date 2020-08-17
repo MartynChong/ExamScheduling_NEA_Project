@@ -1,6 +1,7 @@
 import _sqlite3
 from datetime import timedelta
-from examclass import Exam 
+from examclass import ExamFile 
+
 
 #Initiates transfer of file 
 Exam.obtain_data('database\jan21iGCSE.xlsx')

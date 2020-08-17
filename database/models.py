@@ -1,5 +1,6 @@
 from django.db import models
 import random, string
+from datetime import timedelta, datetime
 
 class Exam(models.Model):
     subject = models.TextField(blank=True, null=True)
@@ -114,15 +115,15 @@ class ExamRooms():
                 size_fit = False
                 count = 0
                 while size_fit == False:
-                    print('Exam',sessions[i]['exam'][0][k], 'Room',classstack.rooms[len(classstack.rooms)-(count+1)],'Currentcount',currentcount,'Room stack',classstack.capacity[len(classstack.capacity)-(count+1)])
+                    # print('Exam',sessions[i]['exam'][0][k], 'Room',classstack.rooms[len(classstack.rooms)-(count+1)],'Currentcount',currentcount,'Room stack',classstack.capacity[len(classstack.capacity)-(count+1)])
                     if currentcount <= classstack.capacity[len(classstack.capacity)-(count+1)]:
                         currentroom = classstack.rooms[len(classstack.rooms)-(count+1)]
-                        print('Current Room Taken',currentroom)
+                        # print('Current Room Taken',currentroom)
                         self.listRooms.append(currentroom)
                         size_fit = True
-                        classstack.pop()
+                        classstack.pop((len(classstack.rooms)-(count+1)))
                     else:
-                        print("Room Fail",sessions[i]['exam'][0][k],classstack.rooms[len(classstack.rooms)-(count+1)])
+                        # print("Room Fail",sessions[i]['exam'][0][k],classstack.rooms[len(classstack.rooms)-(count+1)])
                         count += 1
 
         
@@ -151,14 +152,145 @@ class ClassroomStack():
     def push(self, data):
         self.rooms.append(data)
     
-    def pop(self):
-        self.rooms.pop()
-        self.capacity.pop()
-        self.priority.pop()
-        
+    def pop(self, index):
+        self.rooms.pop(index)
+        self.capacity.pop(index)
+        self.priority.pop(index)
 
 
+class Clashes():
 
+    def __init__(self):
+        #Variables used to identify Clash
+        self.listStudentsInClash = []
+        self.listExamsInClash = []
+        #Variables used to declare Clashes
+        self.listCurrentExams = []
+        self.listCurrentStudents = []
+        self.listOldStartTime = []
+        self.listNewStartTime = []
+        self.listDuration = []
+        self.listOldEndTime = []
+        self.listNewEndTime = []
+        self.listDate = []
+
+    #This function alters the init lists to include sets of clashing exams and the students involved
+    def identify_students_clash(self):
+        sessions = ExamRooms.same_session()
+        for currentSession in range(len(sessions)):
+            sessionlength = len(sessions[currentSession]['exam'][0])
+            if sessionlength > 1:
+
+                #For loop runs through the number of exams in the session
+                for examInSession in range(sessionlength-1):
+
+                    #Initialises the current target exam and the students who take it
+                    studentsInExam = Exampupil.objects.filter(examcode_link=sessions[currentSession]['exam'][0][examInSession])
+                    setStudents = set()
+                    nextexam = 1
+                    for k in range(len(studentsInExam)):
+                        setStudents.add(studentsInExam[k].studentid_link)
+                    # print('Current Exam',sessions[currentSession]['exam'][0][examInSession], 'Students Within',setStudents)
+
+                    #This loop initialises the next exams in the session and their students and obtains the intersecting students
+                    while nextexam < sessionlength:
+                        studentsInNextExam = Exampupil.objects.filter(examcode_link=sessions[currentSession]['exam'][0][nextexam])
+                        setStudentsNextExam = set()
+                        currentExamsCompare = {sessions[currentSession]['exam'][0][examInSession],sessions[currentSession]['exam'][0][nextexam]}
+                        for k in range(len(studentsInNextExam)):
+                            setStudentsNextExam.add(studentsInNextExam[k].studentid_link)
+                        # print("Current Competing Exam", sessions[currentSession]['exam'][0][nextexam], 'Students Within', setStudentsNextExam)
+                        if len(currentExamsCompare) != 1:
+                            # print("Current Clashing Exams", currentExamsCompare)
+                            if setStudents.intersection(setStudentsNextExam):
+                                # print("Clash of Exams", currentExamsCompare, "Students:", setStudents.intersection(setStudentsNextExam))
+                                self.listStudentsInClash.append(setStudents.intersection(setStudentsNextExam))
+                                self.listExamsInClash.append(currentExamsCompare)
+                                nextexam += 1
+                            else:
+                                nextexam += 1
+                        else:
+                            nextexam += 1
+
+    def displaying_clash(self):
+        ClashInstance = Clashes()
+        Clashes.identify_students_clash(ClashInstance)
+        index = 0
+
+        #Iterate through all clashing exams
+        for currentclash in range (len(ClashInstance.listExamsInClash)):
+
+            #Generating String List of the 2 Clashing Exams
+            temp = []
+            for i in ClashInstance.listExamsInClash[currentclash]:
+                temp.append(i)
+            currentexams = str(temp[0].code) + ', ' + str(temp[1].code)
+            self.listCurrentExams.append(currentexams)
+
+            #Generating String List of the students clashing in those two exams
+            temp = []
+            for i in ClashInstance.listStudentsInClash[currentclash]:
+                temp.append(i)
+            currentstudents = ''
+            count = 0
+            for i in range (len(temp)):
+                if count == (len(temp)-1):
+                    currentstudents = currentstudents + str(temp[i].studentid)
+                    count += 1
+                else:
+                    currentstudents = currentstudents + str(temp[i].studentid) + ','
+                    count += 1
+            self.listCurrentStudents.append(currentstudents)
+
+            #Generating String List of the OLD duration, times of each clashing exam
+            for i in ClashInstance.listExamsInClash[currentclash]:
+                self.listOldStartTime.append(i.times)
+                duration = Clashes.convert_duration(i.duration)
+                self.listDuration.append(duration)
+                self.listDate.append(i.date)
+                #Generating String List of the OLD end times, generated from the start times and duration
+                temp = []
+                #Checking if students involved have Extra Time requirements
+                for r in ClashInstance.listStudentsInClash[currentclash]:
+                    temp.append(r)
+                extra_time = False
+                for k in range(len(temp)):
+                    if temp[k].accessarrangement == 'Extra Time (25%)':
+                        extra_time = True
+                if extra_time == True:
+                    self.listDuration[index] = self.listDuration[index] * 1.25
+                starttime = datetime.strptime(i.times, '%H:%M:%S')
+                endtime = (starttime + self.listDuration[index]).time()
+                endtime = str(endtime)
+                self.listOldEndTime.append(endtime)
+                index = index + 1
+
+            #Generating String List of NEW start/end times
+        for exam1 in range(0, len(self.listOldStartTime),2):
+            #Making the earlier exam start 30 mins earlier and finding the end time
+            timechange = timedelta(minutes=30)
+            currenttime = datetime.strptime(str(self.listOldStartTime[exam1]), '%H:%M:%S')
+            currenttime = currenttime - timechange
+            endtime = (currenttime + self.listDuration[exam1])
+            self.listNewEndTime.append(str(endtime.time()))
+            currenttime = str(currenttime.time())
+            self.listNewStartTime.append(currenttime)
+
+            #Making the start/end times for the later consecutive exam
+            starttime2 = timedelta(minutes=15) + endtime
+            endtime2 = starttime2 + self.listDuration[exam1+1]
+            self.listNewEndTime.append(str(endtime2.time()))
+            self.listNewStartTime.append(str(starttime2.time()))
+    
+
+                    
+    @staticmethod
+    def convert_duration(selectedDur):
+        currentDur = selectedDur
+        hour = int(currentDur[0:1])
+        minutes = int(currentDur[3:5])
+        selectedDur = timedelta(hours=hour, minutes=minutes)
+        return selectedDur
 
 
 # import sys
@@ -205,3 +337,5 @@ class ClassroomStack():
 # ClassroomStack.generate_instance(classtest)
 # print(classtest.rooms)
 # print(classtest.capacity)
+
+
