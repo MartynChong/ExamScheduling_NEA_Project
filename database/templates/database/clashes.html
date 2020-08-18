@@ -1,12 +1,15 @@
 {% extends "database/base.html" %}
 <style type="text/css">
+    table          {border:ridge 5px red;}
+    table td       {border:inset 1px #000;}
     table td#CELL9 {background-color:green;}
-  </style>
+</style>
 {% block content %}
 
     {% for item in listClashes %}
-        <h>Exams Involved: {{ item.0 }}</h>
-        <h>Students Affected: {{ item.1 }}</h>
+        <p>Exams Involved: {{ item.0 }}</p>
+        <p>Students Affected: {{ item.1 }}</p>
+        <p>Extra Time?: {{ item.2 }}</p>
         <table border="1" width="700">
             <tr>
                 <td>ExamCode</td>
@@ -14,58 +17,56 @@
                 <td>Current Start Time</td>
                 <td>Current End Time</td>
                 <td>Duration</td>
-                <td>Extra Time?</td>
             </tr>
 
             <tr>
-                <td>{{ item.2 }}</td>
-                <td>{{ item.8 }}</td>
                 <td>{{ item.3 }}</td>
-                <td>{{ item.6 }}</td>
                 <td>{{ item.5 }}</td>
-                <td>{{ item.9 }}</td>
+                <td>{{ item.6 }}</td>
+                <td>{{ item.8 }}</td>
+                <td>{{ item.14 }}</td>
             </tr>
             <tr>
-                <td>{{ item.2 }}</td>
-                <td>{{ item.8 }}</td>
-                <td>{{ item.3 }}</td>
-                <td>{{ item.6 }}</td>
+                <td>{{ item.4 }}</td>
                 <td>{{ item.5 }}</td>
+                <td>{{ item.7 }}</td>
                 <td>{{ item.9 }}</td>
+                <td>{{ item.15 }}</td>
             </tr>
             </table>
-            <p style="visibility: hidden;"> 
-                {{ item }}
-            </p> 
 
         <table border="1" width="700">
             <tr>
                 <td>ExamCode</td>
                 <td>Date</td>
-                <td>New Start Time</td>
-                <td>New End Time</td>
+                <td>Current Start Time</td>
+                <td>Current End Time</td>
                 <td>Duration</td>
-                <td>Extra Time?</td>
                 </tr>
             
             <tr>
-                <td>{{ item.2 }}</td>
-                <td>{{ item.8 }}</td>
-                <td id="td#CELL9">{{ item.4 }}</td>
-                <td id="td#CELL9">{{ item.7 }}</td>
+                <td>{{ item.10 }}</td>
                 <td>{{ item.5 }}</td>
-                <td>{{ item.9 }}</td>
+                <td id="CELL9">{{ item.12 }}</td>
+                <td id="CELL9">{{ item.16 }}</td>
+                <td>{{ item.14 }}</td>
             </tr>
             
             <tr>
-                <td>{{ item.2 }}</td>
-                <td>{{ item.8 }}</td>
-                <td id="td#CELL9">{{ item.4 }}</td>
-                <td id="td#CELL9">{{ item.7 }}</td>
+                <td>{{ item.11 }}</td>
                 <td>{{ item.5 }}</td>
-                <td>{{ item.9 }}</td>
+                <td id="CELL9">{{ item.13 }}</td>
+                <td id="CELL9">{{ item.17 }}</td>
+                <td>{{ item.15 }}</td>
             </tr>
         </table>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" name = '{{ item.3 }}' value="{{ item.3 }}">Submit Changes?</button>
+        </form>
+        <p style="visibility: hidden;"> 
+            {{ item }}
+        </p> 
     {% endfor %}
 
 {% endblock content %}

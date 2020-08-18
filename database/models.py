@@ -166,6 +166,7 @@ class Clashes():
         self.listExamsInClash = []
         #Variables used to declare Clashes
         self.listCurrentExams = []
+        self.listNewIndividualExams = []
         self.listIndividualExams = []
         self.listCurrentStudents = []
         self.listOldStartTime = []
@@ -175,10 +176,6 @@ class Clashes():
         self.listNewEndTime = []
         self.listDate = []
         self.listExtraTime = []
-        self.listCurrentExam2 = []
-        self.listOldStartTime2 = []
-        self.listOldEndTime2 = []
-        self.listDuration2 = []
 
 
     #This function alters the init lists to include sets of clashing exams and the students involved
@@ -231,7 +228,9 @@ class Clashes():
             temp = []
             for i in ClashInstance.listExamsInClash[currentclash]:
                 temp.append(i)
-                self.listIndividualExams.append(str(i))
+                self.listIndividualExams.append((i))
+                newName = i.code + "__2"
+                self.listNewIndividualExams.append(newName)
             currentexams = str(temp[0].code) + ', ' + str(temp[1].code)
             self.listCurrentExams.append(currentexams)
             self.listCurrentExams.append(currentexams)
@@ -305,6 +304,48 @@ class Clashes():
         minutes = int(currentDur[3:5])
         selectedDur = timedelta(hours=hour, minutes=minutes)
         return selectedDur
+    
+
+    def generate_zip_view(self):
+        zipped = []
+        for i in range(0, len(self.listIndividualExams), 2):
+            zipped.append((
+                self.listCurrentExams[i],
+                self.listCurrentStudents[i],
+                self.listExtraTime[i],
+                self.listIndividualExams[i].code,
+                self.listIndividualExams[i + 1].code,
+                self.listDate[i],
+                self.listOldStartTime[i],
+                self.listOldStartTime[i + 1],
+                self.listOldEndTime[i],
+                self.listOldEndTime[i + 1],
+                self.listNewIndividualExams[i],
+                self.listNewIndividualExams[i + 1],
+                self.listNewStartTime[i],
+                self.listNewStartTime[i + 1],
+                self.listDuration[i],
+                self.listDuration[i + 1],
+                self.listNewEndTime[i],
+                self.listNewEndTime[i + 1],
+            ))
+        return zipped
+
+    
+    def update_other_tables(self, examschosen):
+        for i in range(len(examschosen)):
+            examcode = self.listNewIndividualExams[i]
+            date = self.listIndividualExams[i].date
+            duration = self.listDuration[i]
+            subject = self.listIndividualExams[i].subject
+            title = self.listIndividualExams[i].title
+            time = self.listNewStartTime[i]
+
+
+            
+
+        
+
 
     # def print_all(self):
     #     print(self.listCurrentExams ,

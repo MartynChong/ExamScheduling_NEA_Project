@@ -39,18 +39,19 @@ def detail_view(request, code):
     return render(request, 'database/detail_view.html',context)
 
 def clashes(request):
+
     clashInstance = Clashes()
     Clashes.displaying_clash(clashInstance)
-    zipped = zip(clashInstance.listCurrentExams,
-        clashInstance.listCurrentStudents,
-        clashInstance.listIndividualExams,
-        clashInstance.listOldStartTime,
-        clashInstance.listNewStartTime,
-        clashInstance.listDuration,
-        clashInstance.listOldEndTime,
-        clashInstance.listNewEndTime,
-        clashInstance.listDate,
-        clashInstance.listExtraTime
-        )
+    zipped = Clashes.generate_zip_view(clashInstance)
+    currentexams=[]
+    if request.method == 'POST':
+        #Finding which clash exams were chosen to be updated
+        for i in range(len(clashInstance.listIndividualExams)):
+            if request.POST.get(str(clashInstance.listIndividualExams[i])):
+                currentexams.append(clashInstance.listIndividualExams[i])
+                currentexams.append(clashInstance.listIndividualExams[i+1])
+        Clashes.update_other_tables(clashInstance, currentexams)
+
+            
     context={'listClashes': zipped}
     return render(request, 'database/clashes.html',context)
