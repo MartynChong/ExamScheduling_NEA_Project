@@ -84,17 +84,50 @@ class ExamRooms():
         sessions = []
         counter = -1
         broken = False
+
+        #This while loop takes all Exams, filtered by date, and sorted by duration, to create a dictionary of Sessions and the exams within
         while not broken:
             try:
+                removelist = []
                 counter += 1
                 codedict = {
                     "session": counter,
                     "exam": []
                 }
-                same_time = Exam.objects.filter(times=exam_instance[0].times, date = exam_instance[0].date)
-                for i in range(len(same_time)):
-                    exam_instance.remove(same_time[i])
-                codedict['exam'].append(((same_time)))
+                same_time = Exam.objects.filter(date = exam_instance[0].date)
+                
+    
+                if len(same_time) != 1:
+                    for i in range(len(same_time)):
+                        basetime = datetime.strptime(exam_instance[0].times, '%H:%M:%S')
+                        duration = timedelta(hours=3)
+                        newtime = datetime.strptime(same_time[i].times, '%H:%M:%S')
+                        #If the difference in start times are < 4 hours, they are considered the same session
+                        #If the difference is > 4 hours, they are added to the removelist to be removed from the same session
+                        if (newtime - basetime) > duration:
+                            removelist.append(same_time[i].code)
+                
+                    #Removing removelist from same session
+                    for k in range(len(removelist)):
+                        a = removelist[k]
+                        try:
+                            same_time = same_time.exclude(code=a)
+                        except:
+                            pass
+                    codedict['exam'].append(((same_time)))
+
+                    #Removing same session exams from the base Exam list
+                    for i in range(len(same_time)):
+                        try:
+                            exam_instance.remove(same_time[i])
+                        except:
+                            pass
+                else:
+                    #Appends the code dictionary with the session instance
+                    codedict['exam'].append(((same_time)))
+                    exam_instance.remove(same_time[0])
+
+
                 sessions.append(codedict)
             except:
                 broken = True
@@ -105,25 +138,32 @@ class ExamRooms():
     def determine_exam_pairings(self):
         sessions = ExamRooms.same_session()
         count = -1
+
+        #Loops for the number of sessions
         for i in range (len(sessions)):
             sessionlength = len(sessions[i]['exam'][0])
             classstack = ClassroomStack()
             ClassroomStack.generate_instance(classstack)
+
+            #Loops for the length of each session
             for k in range((sessionlength)):
                 self.listExams.append(sessions[i]['exam'][0][k])
+                #Counts up the number of students in this session's exam
                 currentcount = ExamRooms.count_students_per_exam(sessions[i]['exam'][0][k])
                 size_fit = False
                 count = 0
+
+                
+                #While the size of the room cannot fit the student count, skip to the next room
+                #If the size fits, pop the room off the stack for this session
                 while size_fit == False:
-                    # print('Exam',sessions[i]['exam'][0][k], 'Room',classstack.rooms[len(classstack.rooms)-(count+1)],'Currentcount',currentcount,'Room stack',classstack.capacity[len(classstack.capacity)-(count+1)])
                     if currentcount <= classstack.capacity[len(classstack.capacity)-(count+1)]:
                         currentroom = classstack.rooms[len(classstack.rooms)-(count+1)]
-                        # print('Current Room Taken',currentroom)
+
                         self.listRooms.append(currentroom)
                         size_fit = True
                         classstack.pop((len(classstack.rooms)-(count+1)))
                     else:
-                        # print("Room Fail",sessions[i]['exam'][0][k],classstack.rooms[len(classstack.rooms)-(count+1)])
                         count += 1
 
         
