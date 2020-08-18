@@ -45,11 +45,13 @@ def clashes(request):
     zipped = Clashes.generate_zip_view(clashInstance)
     currentexams=[]
     if request.method == 'POST':
+        print("POST")
         #Finding which clash exams were chosen to be updated
         for i in range(len(clashInstance.listIndividualExams)):
-            if request.POST.get(str(clashInstance.listIndividualExams[i])):
+            if request.POST.get((clashInstance.listIndividualExams[i].code)):
                 currentexams.append(clashInstance.listIndividualExams[i])
                 currentexams.append(clashInstance.listIndividualExams[i+1])
+                print(currentexams)
         Clashes.update_other_tables(clashInstance, currentexams)
 
             

@@ -334,14 +334,20 @@ class Clashes():
     
     def update_other_tables(self, examschosen):
         for i in range(len(examschosen)):
-            examcode = self.listNewIndividualExams[i]
-            date = self.listIndividualExams[i].date
-            duration = self.listDuration[i]
-            subject = self.listIndividualExams[i].subject
-            title = self.listIndividualExams[i].title
-            time = self.listNewStartTime[i]
 
+            #Updating Exam Objects with new Instances
+            for k in range(len(self.listIndividualExams)):
+                 if examschosen[i] == self.listIndividualExams[k]:  
+                    index = k
 
+            code = self.listNewIndividualExams[index]
+            date = self.listIndividualExams[index].date
+            duration = self.listDuration[index]
+            subject = self.listIndividualExams[index].subject
+            title = self.listIndividualExams[index].title
+            time = self.listNewStartTime[index]
+            e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration)
+            print('created')
             
 
         
