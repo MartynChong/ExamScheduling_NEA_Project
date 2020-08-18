@@ -142,6 +142,7 @@ class ClassroomStack():
         self.capacity=self.capacity[::-1]
         self.priority=self.priority[::-1]
     
+    #Generates Classroom instance
     def generate_instance(self):
         for i in Classroom.objects.all():
             self.rooms.append(i.roomcode)
@@ -292,11 +293,7 @@ class Clashes():
             self.listNewEndTime.append(str(endtime2.time()))
             self.listNewStartTime.append(str(starttime2.time()))
     
-
-
-    # def split_exams_up(self):
-        
-                    
+                          
     @staticmethod
     def convert_duration(selectedDur):
         currentDur = selectedDur
@@ -305,7 +302,7 @@ class Clashes():
         selectedDur = timedelta(hours=hour, minutes=minutes)
         return selectedDur
     
-
+    #Generates the zip view used to display in html
     def generate_zip_view(self):
         zipped = []
         for i in range(0, len(self.listIndividualExams), 2):
@@ -339,7 +336,7 @@ class Clashes():
             for k in range(len(self.listIndividualExams)):
                  if examschosen[i] == self.listIndividualExams[k]:  
                     index = k
-
+            #Creates a new Exam object with the new Clash Values
             code = self.listNewIndividualExams[index]
             date = self.listIndividualExams[index].date
             duration = self.listDuration[index]
