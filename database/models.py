@@ -405,7 +405,7 @@ class Clashes():
                 searchstudents = Exampupil.objects.filter(studentid_link=currentstudent,examcode_link=self.listIndividualExams[index])
                 updatestudent = searchstudents[0]
                 print(updatestudent)
-                updatestudent.examcode_link = code
+                updatestudent.examcode_link = e
                 updatestudent.save()
                 print(updatestudent.examcode_link, code)
 
