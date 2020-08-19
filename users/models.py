@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class StudentUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Account(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     accesscode = models.TextField(null=True)
-
+    is_teacher = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
 

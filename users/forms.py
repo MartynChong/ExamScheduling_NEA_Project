@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from database.models import Student
 from django.core.exceptions import ValidationError
+from .models import Account
 
 class CustomUserCreationForm(forms.Form):
     username = forms.CharField(label='Enter Username', min_length=4, max_length=150)
@@ -37,7 +38,7 @@ class CustomUserCreationForm(forms.Form):
     def clean_accesscode(self):
         accesscode = self.cleaned_data['accesscode']
         results = Student.objects.filter(accesscode=accesscode).all()
-        if len(results) == 1:
+        if len(results) == 1 or accesscode == 'cLqbug53Vi' or accesscode == 'fvLbfNYUTw':
             pass
         else:
             raise ValidationError("Your Access Code does not match any existing codes.")
@@ -50,7 +51,14 @@ class CustomUserCreationForm(forms.Form):
             self.cleaned_data['email'],
             self.cleaned_data['password1']
         )
+        if self.cleaned_data['accesscode'] == 'cLqbug53Vi':
+            account = Account.objects.create(user= user,accesscode= self.cleaned_data['accesscode'], is_admin= True)
+        elif self.cleaned_data['accesscode'] == 'fvLbfNYUTw':
+            account = Account.objects.create(user= user,accesscode= self.cleaned_data['accesscode'], is_teacher= True)
+        else:
+            account = Account.objects.create(user= user,accesscode= self.cleaned_data['accesscode'])
         return user
+
 
 # class ProfileForm(forms.Form):
 #     class Meta:
