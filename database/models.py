@@ -217,6 +217,9 @@ class Clashes():
         self.listNewEndTime = []
         self.listDate = []
         self.listExtraTime = []
+        #Variable used to update student values
+        self.listDuplicateStudentsInClash = []
+        
 
 
     #This function alters the init lists to include sets of clashing exams and the students involved
@@ -250,6 +253,8 @@ class Clashes():
                             if setStudents.intersection(setStudentsNextExam):
                                 # print("Clash of Exams", currentExamsCompare, "Students:", setStudents.intersection(setStudentsNextExam))
                                 self.listStudentsInClash.append(setStudents.intersection(setStudentsNextExam))
+                                self.listDuplicateStudentsInClash.append(setStudents.intersection(setStudentsNextExam))
+                                self.listDuplicateStudentsInClash.append(setStudents.intersection(setStudentsNextExam))
                                 self.listExamsInClash.append(currentExamsCompare)
                                 nextexam += 1
                             else:
@@ -258,16 +263,15 @@ class Clashes():
                             nextexam += 1
 
     def displaying_clash(self):
-        ClashInstance = Clashes()
-        Clashes.identify_students_clash(ClashInstance)
+        self.identify_students_clash()
         index = 0
 
         #Iterate through all clashing exams
-        for currentclash in range (len(ClashInstance.listExamsInClash)):
+        for currentclash in range (len(self.listExamsInClash)):
 
             #Generating String List of the 2 Clashing Exams
             temp = []
-            for i in ClashInstance.listExamsInClash[currentclash]:
+            for i in self.listExamsInClash[currentclash]:
                 temp.append(i)
                 self.listIndividualExams.append((i))
                 newName = i.code + "__2"
@@ -277,7 +281,7 @@ class Clashes():
             self.listCurrentExams.append(currentexams)
             #Generating String List of the students clashing in those two exams
             temp = []
-            for i in ClashInstance.listStudentsInClash[currentclash]:
+            for i in self.listStudentsInClash[currentclash]:
                 temp.append(i)
             currentstudents = ''
             count = 0
@@ -292,7 +296,7 @@ class Clashes():
             self.listCurrentStudents.append(currentstudents)
 
             #Generating String List of the OLD duration, times of each clashing exam
-            for i in ClashInstance.listExamsInClash[currentclash]:
+            for i in self.listExamsInClash[currentclash]:
                 self.listOldStartTime.append(i.times)
                 duration = Clashes.convert_duration(i.duration)
                 self.listDuration.append(duration)
@@ -301,7 +305,7 @@ class Clashes():
                 #Generating String List of the OLD end times, generated from the start times and duration
                 temp = []
                 #Checking if students involved have Extra Time requirements
-                for r in ClashInstance.listStudentsInClash[currentclash]:
+                for r in self.listStudentsInClash[currentclash]:
                     temp.append(r)
                 extra_time = False
                 for k in range(len(temp)):
@@ -370,8 +374,8 @@ class Clashes():
 
     
     def update_other_tables(self, examschosen):
-        for i in range(len(examschosen)):
 
+        for i in range(len(examschosen)):
             #Updating Exam Objects with new Instances
             for k in range(len(self.listIndividualExams)):
                  if examschosen[i] == self.listIndividualExams[k]:  
@@ -383,9 +387,19 @@ class Clashes():
             subject = self.listIndividualExams[index].subject
             title = self.listIndividualExams[index].title
             time = self.listNewStartTime[index]
-            e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration)
-            print('created')
-            
+            # e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration)
+
+            #Updating Students taking those exams
+            studentsinvolved = self.listDuplicateStudentsInClash[i]
+            for k in range(len(studentsinvolved)):
+                currentstudent = studentsinvolved.pop()
+                searchstudents = Exampupil.objects.filter(studentid_link=currentstudent,examcode_link=self.listIndividualExams[index])
+                updatestudent = searchstudents[0]
+                print(updatestudent)
+                # updatestudent.examcode_link = code
+                print(updatestudent.examcode_link, code)
+
+        
 
         
 
