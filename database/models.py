@@ -133,6 +133,7 @@ class ExamRooms():
                 sessions.append(codedict)
             except:
                 broken = True
+        print(sessions)
         return sessions
             
             
@@ -227,8 +228,10 @@ class Clashes():
     #This function alters the init lists to include sets of clashing exams and the students involved
     def identify_students_clash(self):
         sessions = ExamRooms.same_session()
-        sessions = [n for n in sessions if not True in n.clash_done]
+            
         for currentSession in range(len(sessions)):
+            #This removes post-Clash Exams from the session list with list comprehension
+            sessions[currentSession]['exam'][0] = sessions[currentSession]['exam'][0].filter(clash_done=False)
             sessionlength = len(sessions[currentSession]['exam'][0])
             if sessionlength > 1:
 
