@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Exam, ExamRooms, Clashes
 from django.db.models import Q
+from django.contrib import messages
 
 
 
@@ -53,7 +54,8 @@ def clashes(request):
                 currentexams.append(clashInstance.listIndividualExams[i+1])
                 print(currentexams)
         Clashes.update_other_tables(clashInstance, currentexams)
-
+        messages.success(request, f'Clash was resolved!')
+        return redirect('database-home')
             
     context={'listClashes': zipped}
     return render(request, 'database/clashes.html',context)

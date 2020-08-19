@@ -48,8 +48,8 @@ class Exampupil(models.Model):
     # examcode = models.TextField(blank=True, null=True)
     # pupilid = models.TextField(blank=True, null=True)
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    examcode_link = models.ForeignKey(Exam, null=True, on_delete=models.CASCADE)
-    studentid_link = models.ForeignKey(Student,null=True, on_delete=models.CASCADE)
+    examcode_link = models.ForeignKey(Exam, null=True, on_delete=models.SET_NULL)
+    studentid_link = models.ForeignKey(Student,null=True, on_delete=models.SET_NULL)
     class Meta:                                                                                                                         
         db_table = 'ExamPupil'
 
@@ -62,11 +62,6 @@ class Classroom(models.Model):
     class Meta:
         db_table = 'Classroom'
 
-
-# class ExamRoom(models.Model):
-#     examcode = models.ForeignKey(Exam, null=True, on_delete=models.CASCADE)
-#     roomcode = models.ForeignKey(Classroom, null=True, on_delete=models.CASCADE)
-#     id = models.AutoField(db_column='ID', primary_key=True)
 
 
 class ExamRooms():
