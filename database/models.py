@@ -100,11 +100,11 @@ class ExamRooms():
                 if len(same_time) != 1:
                     for i in range(len(same_time)):
                         basetime = datetime.strptime(exam_instance[0].times, '%H:%M:%S')
-                        duration = timedelta(hours=3)
+                        duration = timedelta(hours=2)
                         newtime = datetime.strptime(same_time[i].times, '%H:%M:%S')
                         #If the difference in start times are < 4 hours, they are considered the same session
                         #If the difference is > 4 hours, they are added to the removelist to be removed from the same session
-                        if (newtime - basetime) > duration:
+                        if not -duration < (newtime-basetime) < duration:
                             removelist.append(same_time[i].code)
                 
                     #Removing removelist from same session
