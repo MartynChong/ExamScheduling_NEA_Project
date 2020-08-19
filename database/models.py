@@ -347,7 +347,7 @@ class Clashes():
         return selectedDur
 
     def convert_duration_back(self):
-        for i in range(len(self.listDuration))
+        for i in range(len(self.listDuration)):
             duration = self.listDuration[i]
             stringduration = str(duration)
             list = stringduration.split(':')
