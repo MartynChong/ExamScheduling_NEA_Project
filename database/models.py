@@ -9,6 +9,7 @@ class Exam(models.Model):
     date = models.TextField(blank=True, null=True)
     times = models.TextField(blank=True, null=True)
     duration = models.TextField(blank=True, null=True)
+    clash_done = models.BooleanField(null=True,default=False)
 
     class Meta:
         db_table = 'Exam'
@@ -22,6 +23,7 @@ class Student(models.Model):
     birthdate = models.TextField(blank=True, null=True)
     accessarrangement = models.TextField(blank=True, null=True)
     accesscode = models.TextField(null = True)
+    accountmade = models.BooleanField(null=True,default=False)
 
     class Meta:
         db_table = 'Student'
@@ -396,7 +398,7 @@ class Clashes():
             subject = self.listIndividualExams[index].subject
             title = self.listIndividualExams[index].title
             time = self.listNewStartTime[index]
-            e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration)
+            e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration, clash_done= True)
 
             #Updating Students taking those exams
             studentsinvolved = self.listDuplicateStudentsInClash[index]
