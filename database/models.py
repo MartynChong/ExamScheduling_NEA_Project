@@ -298,6 +298,7 @@ class Clashes():
             #Generating String List of the OLD duration, times of each clashing exam
             for i in self.listExamsInClash[currentclash]:
                 self.listOldStartTime.append(i.times)
+                print(i.code, i.duration)
                 duration = Clashes.convert_duration(i.duration)
                 self.listDuration.append(duration)
                 self.listDate.append(i.date)
@@ -387,17 +388,23 @@ class Clashes():
             subject = self.listIndividualExams[index].subject
             title = self.listIndividualExams[index].title
             time = self.listNewStartTime[index]
-            # e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration)
+            e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration)
 
             #Updating Students taking those exams
-            studentsinvolved = self.listDuplicateStudentsInClash[i]
+            studentsinvolved = self.listDuplicateStudentsInClash[index]
+            print(studentsinvolved)
             for k in range(len(studentsinvolved)):
                 currentstudent = studentsinvolved.pop()
+                print("Current",currentstudent, self.listIndividualExams[index])
                 searchstudents = Exampupil.objects.filter(studentid_link=currentstudent,examcode_link=self.listIndividualExams[index])
+                print(searchstudents)
                 updatestudent = searchstudents[0]
                 print(updatestudent)
-                # updatestudent.examcode_link = code
                 print(updatestudent.examcode_link, code)
+                updatestudent.examcode_link = Exam.objects.filter(code = code).first()
+                print(updatestudent.examcode_link, code)
+                updatestudent.save()
+
 
         
 
