@@ -345,6 +345,14 @@ class Clashes():
         minutes = int(currentDur[3:5])
         selectedDur = timedelta(hours=hour, minutes=minutes)
         return selectedDur
+
+    def convert_duration_back(self):
+        for i in range(len(self.listDuration))
+            duration = self.listDuration[i]
+            stringduration = str(duration)
+            list = stringduration.split(':')
+            newvalue = list[0] + 'h ' + list[1] + 'm'
+            self.listDuration[i] = newvalue
     
     #Generates the zip view used to display in html
     def generate_zip_view(self):
@@ -374,6 +382,7 @@ class Clashes():
 
     
     def update_other_tables(self, examschosen):
+        self.convert_duration_back()
 
         for i in range(len(examschosen)):
             #Updating Exam Objects with new Instances
@@ -387,19 +396,22 @@ class Clashes():
             subject = self.listIndividualExams[index].subject
             title = self.listIndividualExams[index].title
             time = self.listNewStartTime[index]
-            # e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration)
+            e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration)
 
             #Updating Students taking those exams
-            studentsinvolved = self.listDuplicateStudentsInClash[i]
+            studentsinvolved = self.listDuplicateStudentsInClash[index]
             for k in range(len(studentsinvolved)):
                 currentstudent = studentsinvolved.pop()
                 searchstudents = Exampupil.objects.filter(studentid_link=currentstudent,examcode_link=self.listIndividualExams[index])
                 updatestudent = searchstudents[0]
                 print(updatestudent)
-                # updatestudent.examcode_link = code
+                updatestudent.examcode_link = code
+                updatestudent.save()
                 print(updatestudent.examcode_link, code)
 
         
+
+
 
         
 
