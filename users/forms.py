@@ -7,17 +7,9 @@ from .models import StudentUser
 from django.db import transaction
 
 
-class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField()
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
-
-
 class ProfileForm(forms.Form):
     class Meta:
-        model = User
+        model = StudentUser
         fields = ['accesscode']
         
     def clean_accesscode(self):
@@ -28,19 +20,14 @@ class ProfileForm(forms.Form):
         else:
             raise ValidationError("Your Access Code does not match any existing codes.")
 
-class StudentSignUpForm(UserCreationForm):
+        
+
+class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
     accesscode = ProfileForm()
 
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-    @transaction.atomic
-    def save(self):
-        user = super().save(commit=False)
-        user.is_student = True
-        user.save()
-        student = StudentUser.objects.create(user=user)
-        student.accesscode.add(*self.cleaned_data.get('accesscode'))
-        return user
+
