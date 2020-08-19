@@ -9,7 +9,7 @@ class Exam(models.Model):
     date = models.TextField(blank=True, null=True)
     times = models.TextField(blank=True, null=True)
     duration = models.TextField(blank=True, null=True)
-    clash_done = models.BooleanField(null=True,default=False)
+    clash_done = models.BooleanField(null=True, default=False)
 
     class Meta:
         db_table = 'Exam'
@@ -23,7 +23,7 @@ class Student(models.Model):
     birthdate = models.TextField(blank=True, null=True)
     accessarrangement = models.TextField(blank=True, null=True)
     accesscode = models.TextField(null = True)
-    accountmade = models.BooleanField(null=True,default=False)
+    accountmade = models.BooleanField(null=True, default=False)
 
     class Meta:
         db_table = 'Student'
@@ -227,6 +227,7 @@ class Clashes():
     #This function alters the init lists to include sets of clashing exams and the students involved
     def identify_students_clash(self):
         sessions = ExamRooms.same_session()
+        sessions = [n for n in sessions if not True in n.clash_done]
         for currentSession in range(len(sessions)):
             sessionlength = len(sessions[currentSession]['exam'][0])
             if sessionlength > 1:
@@ -398,7 +399,7 @@ class Clashes():
             subject = self.listIndividualExams[index].subject
             title = self.listIndividualExams[index].title
             time = self.listNewStartTime[index]
-            e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration, clash_done= True)
+            e = Exam.objects.create(subject=subject,title=title,code=code,date=date,times=time,duration=duration, clash_done=True)
 
             #Updating Students taking those exams
             studentsinvolved = self.listDuplicateStudentsInClash[index]
