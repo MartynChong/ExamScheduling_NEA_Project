@@ -5,8 +5,11 @@
     table td#CELL9 {background-color:green;}
 </style>
 {% block content %}
-
+    <h1>Clashes</h1>
+    
     {% for item in listClashes %}
+        <div>
+        
         <p>Exams Involved: {{ item.0 }}</p>
         <p>Students Affected: {{ item.1 }}</p>
         <p>Extra Time?: {{ item.2 }}</p>
@@ -34,7 +37,10 @@
                 <td>{{ item.15 }}</td>
             </tr>
             </table>
-
+        
+        <p> 
+            A new exam instance will be created for these students below:
+        </p> 
         <table border="1" width="700">
             <tr>
                 <td>ExamCode</td>
@@ -67,6 +73,7 @@
         <p style="visibility: hidden;"> 
             {{ item }}
         </p> 
+    </div>
     {% endfor %}
 
 {% endblock content %}

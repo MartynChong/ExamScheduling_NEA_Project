@@ -128,7 +128,6 @@ class ExamRooms():
                 sessions.append(codedict)
             except:
                 broken = True
-        print(sessions)
         return sessions
             
             

@@ -1,0 +1,21 @@
+{% extends 'database/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <div class="media">
+        <div class="media-body">
+            <h2 class="account-heading">{{ user.username }}</h2>
+            <p class="text-secondary">Email: {{ user.email }}</p>
+            {% if user.is_superuser %}
+                <p class='text-secondary'>User status: Admin</p>
+            {% elif user.is_staff %}
+                <p class='text-secondary'>User status: Teacher</p>
+            {% else %}
+                <p class='text-secondary'>User status: Student</p>
+            {% endif %}
+        </div>
+        </div>
+        <!-- FORM HERE -->
+    </div>
+{% endblock content %}
+

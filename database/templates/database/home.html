@@ -1,4 +1,21 @@
 {% extends "database/base.html" %}
 {% block content %}
-
+    <div class='col-md-10'>
+        <h1>Welcome to my Exam Site!</h1>
+        <h3>Head over to:</h3>
+        {% if user.is_authenticated %}
+            <h4>'All Exams' to preview all exams in the timetable.</h4>
+            <h4>'Exam Rooms' to view the rooms each exam will be held in.</h4>
+            {% if user.is_superuser %}
+            <h4>'Clashes' to view all the clashes between exams.</h4>
+            <h4>'Student Search' to view an individual's timetable.</h4>
+            {% elif user.is_staff %}
+            <h4>'Student Search' to view an individual's timetable.</h4>
+            {% endif %}
+        {% else %}
+            <h6><a class="nav-item nav-link" href="{% url 'login' %}">The login page to sign in</a></h6>
+            <h6><a class="nav-item nav-link" href="{% url 'register' %}">The register page to create an account</a></h6>
+        {% endif %}
+    </div>
+    
 {% endblock content %}

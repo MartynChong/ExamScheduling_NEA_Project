@@ -1,5 +1,6 @@
 {% extends "database/base.html" %}
 {% block content %}
+    <h1>Current Exam: {{ data.code }}</h1>
     <table border="1" width="700">
     <tr>
     <td>Exam Code</td>
@@ -24,4 +25,38 @@
         {{ data.duration }}</td> 
     </tr>
     </table>
+    <p style="visibility: hidden;"> 
+        Hahahahh
+    </p> 
+
+    
+    {% if user.is_superuser or user.is_staff %}
+    <h3>Students Involved:</h3>
+    <table border="1" width="700">
+        <tr>
+        <td>Pupil ID</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Birthdate</td>
+        <td>Access Arrangements</td>
+        </tr>
+
+        {% for pupil in pupils %}
+        <tr>
+        <td>
+            {{ pupil.studentid }}</td>
+        <td>
+            {{ pupil.firstname }}</td>
+        <td>
+            {{ pupil.lastname }}</td>
+        <td>
+            {{ pupil.birthdate }}</td>
+        <td>
+            {{ pupil.accessarrangement }}</td>    
+        </tr>
+        
+        {% endfor %}
+    </table>
+    {% endif %}
+
 {% endblock content %}

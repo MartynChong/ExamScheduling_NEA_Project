@@ -1,7 +1,10 @@
 {% extends "database/base.html" %}
 {% block content %}
     <h1>Exam Rooms</h1>
-
+    <h3>Click on the exam links to view additional details</h3>
+    {% if user.is_superuser or user.is_staff %}
+    <h3>Students participating in each exam are also listed within.</h3>
+    {% endif %}
     <table border="1" width="700">
     <tr>
     <td>Exam </td>

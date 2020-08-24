@@ -1,0 +1,10 @@
+{% extends "database/base.html" %}
+{% block content %}
+    <h2> Which student's exams would you like to view? Please enter their code below.</h2>
+    <form class="example" method="GET" action="{% url 'database-studentexams' %}">
+        <input type="text" placeholder="Search.." name="q" value="{{request.GET.q}}">
+        <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+{% endblock content %}
+
+
